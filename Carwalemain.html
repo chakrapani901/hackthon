@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CaraWale</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CaraWale</a>
+    </div>
+    <ul class="nav navbar-nav">
+      
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">New Cars <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Page 1-1</a></li>
+          <li><a href="#">Page 1-2</a></li>
+          <li><a href="#">Page 1-3</a></li>
+        </ul>
+      </li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Used Cars <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Page 1-1</a></li>
+          <li><a href="#">Page 1-2</a></li>
+          <li><a href="#">Page 1-3</a></li>
+        </ul>
+      </li>
+       <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Reviews & News <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Page 1-1</a></li>
+          <li><a href="#">Page 1-2</a></li>
+          <li><a href="#">Page 1-3</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+  
+<div class="container">
+  <h3>Select The Manufacture </h3>
+  <div class="form-group" style="width:300px;">
+  <select class="form-control" id="Manufacture">
+    <option>Select Manufacture</Option>
+  </select>
+   <h3>Select the category </h3>
+  <select class="form-control" id="Category">
+    <option>Select Category</Option>
+  </select>
+   <h3>Select the Model </h3>
+  <select class="form-control" id="Model">
+   <option>Select Model</Option>
+  </select>
+</div>
+</div>
+
+<table class="table table-striped" style="width: 50%;margin-left: 10%">
+  <thead>
+    <tr>
+      <th>Manufacture</th>
+      <th>Category</th>
+      <th>Model</th>
+      <th>Car Name</th>
+    </tr>
+  </thead>
+  <tbody id="table1">
+ 
+  </tbody>
+</table>
+
+
+</body>
+    <script>  
+         $(document).ready(function () {  
+		      var manufactures=null;		 
+             //$("#Save").click(function () {  
+          $.get("http://localhost:52105/api/Cars?getall=%22%22", function(data, status){ 
+		       manufactures=data;
+		  //alert("Data: " + manufactures + "\n Status: " + status);   
+    
+      jQuery.each( manufactures, function( i, val ) {
+          $('#Manufacture').append($("<option>"+ val +"</option>")); 
+});
+             //});  
+         }); 
+
+
+
+         $( "#Manufacture" ).change(function() {
+  var nameofmode=$("#Manufacture option:selected").text();
+
+  if(nameofmode!="Select Manufacture")
+  {
+
+    $.get("http://localhost:52105/api/Cars?CarManufacture="+nameofmode, function(data, status){ 
+		       manufactures=data;
+		  //alert("Data: " + manufactures + "\n Status: " + status);   
+    
+      jQuery.each( manufactures, function( i, val ) {
+          $('#Category').append($("<option>"+ val +"</option>")); 
+});
+             //});  
+         }); 
+  }
+       
+});
+
+
+$( "#Category" ).change(function() {
+  
+  var nameofmode=$("#Manufacture option:selected").text();
+  var nameofmode1=$("#Category option:selected").text();
+  if(nameofmode1!="Select Category")
+  {
+
+    $.get("http://localhost:52105/api/Cars?CarManufacture="+nameofmode+"&CarCategory="+nameofmode1, function(data, status){ 
+		       manufactures=data;
+		  //alert("Data: " + manufactures + "\n Status: " + status);   
+    
+      jQuery.each( manufactures, function( i, val ) {
+          $('#Model').append($("<option>"+ val +"</option>")); 
+});
+             //});  
+         }); 
+  }
+          
+});
+
+//car detals
+
+
+
+$( "#Model" ).change(function() {
+  
+  var nameofmode=$("#Manufacture option:selected").text();
+  var nameofmode1=$("#Category option:selected").text();
+  var nameofmode2=$("#Model option:selected").text();
+   var finalob=null; 
+
+   if(nameofmode2 !="Select Model")
+   {
+    $.get("http://localhost:52105/api/Cars?CarManufacture="+nameofmode+"&CarCategory="+nameofmode1+"&CareModel="+nameofmode2, function(data, status){ 
+    finalob=data;
+		  //alert("Data: " + manufactures + "\n Status: " + status);   
+    
+    
+      jQuery.each( finalob, function( i, val ) {
+          
+        $("#table1").append("<tr><td>"+nameofmode+"</td><td>"+nameofmode1+"</td><td>"+nameofmode2+"</td><td>"+val+"</td></tr>");
+
+});
+             //});  
+         }); 
+
+   }
+  
+});
+
+
+
+
+          
+		 
+		 });
+    </script>  
+</html>
